@@ -38,7 +38,7 @@ handle_error() {
 
 # Функция для проверки наличия необходимых утилит
 check_dependencies() {
-    local deps=("git" "nft" "grep" "sed")
+    local deps=("git" "nft" "grep" "sed" "warp-cli" )
     for dep in "${deps[@]}"; do
         if ! command -v "$dep" >/dev/null 2>&1; then
             handle_error "Не установлена утилита $dep"
@@ -56,7 +56,7 @@ load_config() {
     source "$CONF_FILE"
     
     # Проверка обязательных переменных
-    if [ -z "$interface" ] || [ -z "$auto_update" ] || [ -z "$strategy" ]; then
+    if [ -z "$interface" ] || [ -z "$auto_update" ] || [ -z "$strategy" ] || [ -z "$use_warp" ]; then
         handle_error "Отсутствуют обязательные параметры в конфигурационном файле"
     fi
 }
@@ -210,6 +210,45 @@ start_nfqws() {
     done
 }
 
+# Функция запуска сервисов warp
+start_warp() {
+    if $NOINTERACTIVE; then
+	if [[ "$use_warp" =~ ^[Yy]$ ]]; then
+        if systemctl is-active --quiet warp-svc; then
+            log "Службы cloudflare warp уже запущены"
+        else
+            log "Запуск служб cloudflare warp..."
+            debug_log "sudo systemctl start warp-svc"
+            sudo systemctl start warp-svc
+            sleep 1
+            debug_log "warp-cli connect"
+            warp-cli connect
+            echo "Службы cloudflare warp успешно запущены"
+        fi
+        else
+            echo "Запуск без сервисов cloudflare warp"
+	fi
+    else
+	    read -p "Для работы aws (amazon web services) и cloudflare необходимо использовать cloudflare warp, может работать нестабильно. Использовать cloudflare warp? (y/n): " warp_choice
+	    if [[ "$warp_choice" =~ ^[Yy]$ ]]; then
+	        if systemctl is-active --quiet "warp-svc"; then
+                log "Службы cloudflare warp уже запущены"
+            else
+                log "Запуск служб cloudflare warp..."
+                debug_log "sudo systemctl start warp-svc"
+                sudo systemctl start warp-svc
+                sleep 10
+                debug_log "warp-cli connect"
+                warp-cli connect
+                echo "Службы cloudflare warp успешно запущены"
+            fi
+            else
+                echo "Запуск без сервисов cloudflare warp"
+	    fi
+
+    fi	
+}
+
 # Основная функция
 main() {
     if [[ "$1" == "-debug" ]]; then
@@ -244,6 +283,7 @@ main() {
         setup_nftables "$interface"
     fi
     start_nfqws
+    start_warp
     log "Настройка успешно завершена"
 }
 

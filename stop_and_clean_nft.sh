@@ -45,8 +45,25 @@ clear_firewall_rules() {
     fi
 }
 
+# Остановка служб warp
+stop_warp() {
+    # Проверка на активность сдужб warp
+    if systemctl is-active --quiet warp-svc; then
+        # Остановка служб warp
+        echo "Демон warp-svc запущен."
+        echo "Остановка служб cloudflare warp"
+        warp-cli disconnect
+        sudo systemctl stop warp-svc
+        log "Службы cloudflare warp успешно остановлены"
+    else
+        echo "Демон warp-svc не запущен."
+        log "Остановка служб cloudflare warp не требуется"
+    fi
+}
+
 # Основной процесс
 stop_and_clear_firewall() {
+    stop_warp # Останавливаем службы warp
     stop_nfqws_processes # Останавливаем процессы nfqws
     clear_firewall_rules # Чистим правила nftables
 }
