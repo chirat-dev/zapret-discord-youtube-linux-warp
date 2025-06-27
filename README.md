@@ -1,7 +1,7 @@
 # Основная информация
    Этот обходник представляет собой версию обхода от Sergeydigl3, адаптированную под новые блокировки от ркн, в частности блокировки aws и cloudflare.
    
-   Для работы обходника, в него внедрен cloudflare warp, который позволяет обходить блокировки aws и cloudflare, aur: https://aur.archlinux.org/packages?O=0&K=cloudflare-warp-bin
+   Для работы обходника, в него внедрен cloudflare warp, который позволяет обходить блокировки aws и cloudflare, aur: https://aur.archlinux.org/packages/cloudflare-warp-bin
    
    Собран за один вечер на коленке, так что могут быть баги и недоработки.
 
