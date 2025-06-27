@@ -11,6 +11,8 @@
    После всех выполнения всех инструкций из оригинального репозитория, необходимо также установить сам warp
    ```bash
    yay -S cloudflare-warp-bin
+   sudo systemctl start warp-svc
+   warp-cli registration new
    ```
    Если у вас вечная установка, то:
    
