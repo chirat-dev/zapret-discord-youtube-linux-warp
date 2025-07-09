@@ -11,8 +11,6 @@
    После всех выполнения всех инструкций из оригинального репозитория, необходимо также установить сам warp:
    ```bash
    yay -S cloudflare-warp-bin
-   sudo systemctl start warp-svc
-   warp-cli registration new
    ./main_script.sh
    ```
    Если у вас вечная установка, то:
@@ -20,7 +18,22 @@
    - Попробуйте перезапустить установку
    - Попробуйте начать установку, включив обходник от Sergeydigl3
 
-   Далее необходимо перенести файл list-general.txt в папку zapret-latest
+   После этого можно сразу же отключить основной скрипт
+   
+   Далее необходимо перенести файл list-general.txt в папку zapret-latest и снова запустить скрипт, но без включения warp
+
+   ```bash
+   cp list-general.txt zapret-latest/
+   ./main_script.sh
+   ```
+
+   Далее необходимо создать регистрацию в warp, а также выбрать режим его работы, во избежания багов
+
+   ```bash
+   sudo systemctl start warp-svc
+   warp-cli registration new
+   warp-cli mode tunnel_only
+   ```
 
    После перезагрузки все должно заработать правильно
 
