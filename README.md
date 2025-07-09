@@ -9,10 +9,14 @@
    Перед клонированием репозитория прочитайте информацию об оригинальном обходнике на линукс: https://github.com/Sergeydigl3/zapret-discord-youtube-linux
    
    После всех выполнения всех инструкций из оригинального репозитория, необходимо также установить сам warp:
+   
    ```bash
    yay -S cloudflare-warp-bin
+   git clone https://github.com/chirat-dev/zapret-discord-youtube-linux-warp.git
+   cd zapret-discord-youtube-linux-warp
    ./main_script.sh
    ```
+
    Если у вас вечная установка, то:
    
    - Попробуйте перезапустить установку
